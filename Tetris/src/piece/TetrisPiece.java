@@ -1,56 +1,72 @@
 package piece;
 
-import config.Position;
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract class TetrisPiece {
     //not sure if we had to implement only the five figures given in the task or all of them
 
-    private String color; //Each Piece will have a different color (S piece will be different from I piece and so on)
-    private Position possition; // points to bottom left square of the piece
+    private Point navigationPoint;
+    private List<Block> blockList;
+    private List<Integer> rotationCounter = new ArrayList<>();
 
-    public TetrisPiece(String color, Position possition) {
-        this.color = color;
-        this.possition = possition;
+    public TetrisPiece(Point navigationPoint, List<Block> blockList) {
+        this.blockList = blockList;
+        this.navigationPoint = navigationPoint;
+        rotate();
     }
 
-    private boolean canMove() {
-    return true; // logic for getting out of board boundaries
+    public Point getNavigationPoint() {
+        return navigationPoint;
+    }
+
+    public void setNavigationPoint(Point navigationPoint) {
+        this.navigationPoint = navigationPoint;
+    }
+
+    public List<Block> getBlockList() {
+        return blockList;
+    }
+
+    public void setBlockList(List<Block> blockList) {
+        this.blockList = blockList;
     }
 
 
-    public void rotate(boolean rotation){
-        if (!rotation){
-            //rotate counter clockwise
-        }
-        if (rotation){
-            //rotate clockwise
-        }
+    public abstract void rotate();
+
+    public void moveDown(){
+        blockList.forEach(block -> block.setBlockPoint(
+                new Point(block.getBlockPoint().x,
+                        block.getBlockPoint().y+1)));
+
+        navigationPoint = new Point(navigationPoint.x,navigationPoint.y+1);
+
     }
 
     public void move(boolean movement){
         if (!movement){
-            //move left
+            blockList.forEach(block -> block.setBlockPoint(
+                    new Point(block.getBlockPoint().x-1,
+                            block.getBlockPoint().y)));
+
+            navigationPoint = new Point(navigationPoint.x-1,navigationPoint.y);
         }
         if (movement){
-            //move right
+            blockList.forEach(block -> block.setBlockPoint(
+                    new Point(block.getBlockPoint().x+1,
+                            block.getBlockPoint().y)));
+
+            navigationPoint = new Point(navigationPoint.x+1,navigationPoint.y);
         }
     }
 
-    public void downPress(boolean downPressed){
-        if (downPressed){
-            //move piece faster down
+    public int getRotation(){
+        rotationCounter.add(0);
+        if (rotationCounter.size()== 5){
+            rotationCounter = new ArrayList<>();
         }
-    }
-
-    public void display(){
-
-    }
-
-    public Position getPossition() {
-        return possition;
-    }
-
-    public void setPossition(Position possition) {
-        this.possition = possition;
+        return rotationCounter.size();
     }
 }

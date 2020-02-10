@@ -1,6 +1,9 @@
+import gameconfig.GameEngine;
+
 public class Main {
 
     public static void main(String[] args) {
-        //Nothing to call yet
+        GameEngine gameEngine = new GameEngine();
+        gameEngine.run();
     }
 }
